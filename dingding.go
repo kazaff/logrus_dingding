@@ -29,7 +29,7 @@ func (hook *DingHook) Fire(entry *logrus.Entry) error{
 	fields, _ = json.Marshal(string(fields[:]))	// 为了转义
 	tmp := strings.TrimRight(string(fields[1:]), "\"")	// 截断前后的双引号
 
-	message := `{"msgtype": "markdown","markdown": {"title": "`+entry.Level.String()+`","text": "#### ` + entry.Level.String() + `\n ![screenshot](http://lorempixel.com/400/200/cats?t=`+time.Now().Format(time.RFC850)+`)\n\n `+ entry.Message + `\n\n `+tmp+`"}}`
+	message := `{"msgtype": "markdown","markdown": {"title": "`+entry.Level.String()+`","text": "#### ` + hook.AppName + "--"+ entry.Level.String() + `\n ![screenshot](http://lorempixel.com/400/200/cats?t=`+time.Now().Format(time.RFC850)+`)\n\n `+ entry.Message + `\n\n `+tmp+`"}}`
 	jsonStr := []byte(message)
 	req, err := http.NewRequest("POST", hook.Robot, bytes.NewBuffer(jsonStr))
 	if err != nil {
